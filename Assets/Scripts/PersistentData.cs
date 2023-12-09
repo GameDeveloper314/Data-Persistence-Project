@@ -6,8 +6,8 @@ using UnityEngine;
 public class PersistentData : MonoBehaviour
 {
     public static PersistentData Instance;
+    public string Name;
     
-
     private void Awake()
     {
         if (Instance != null)
@@ -18,26 +18,26 @@ public class PersistentData : MonoBehaviour
         
         Instance = this;
         DontDestroyOnLoad(gameObject);
-        LoadColor();
+        LoadName();
     }
 
     [System.Serializable]
     class SaveData
     {
-        
+        public string Name;
     }
 
-    public void SaveColor()
+    public void SaveName()
     {
         SaveData data = new SaveData();
-        
+        data.Name = Name;
 
         string json = JsonUtility.ToJson(data);
 
         File.WriteAllText(Application.persistentDataPath + "/savefile.json", json);
     }
 
-    public void LoadColor()
+    public void LoadName()
     {
         string path = Application.persistentDataPath + "/savefile.json";
         if (File.Exists(path))
@@ -45,7 +45,7 @@ public class PersistentData : MonoBehaviour
             string json = File.ReadAllText(path);
             SaveData data = JsonUtility.FromJson<SaveData>(json);
 
-            
+            Name = data.Name;
         }
     }
 }
