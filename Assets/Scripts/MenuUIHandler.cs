@@ -6,26 +6,25 @@ using TMPro;
 
 public class MenuUIHandler : MonoBehaviour
 {
-    public TMP_Text InputField;
-    
-    public void Start()
-    {
-        LoadName();
-    }
+    public TMP_Text InputField, NameAndScoreText;
 
+    void Start()
+    {
+        UpdateNameAndScore();
+    }
+    
     public void StartNew()
     {
         SceneManager.LoadScene(1);
     }
 
-    public void SaveName()
+    public void PersistentName()
     {
         PersistentData.Instance.Name = InputField.text;
-        PersistentData.Instance.SaveName();
     }
 
-    public void LoadName()
+    public void UpdateNameAndScore()
     {
-        InputField.text = PersistentData.Instance.Name;
+        NameAndScoreText.text = "Name: " + PersistentData.Instance.Name + ", High Score: " + PersistentData.Instance.HighScore;
     }
 }

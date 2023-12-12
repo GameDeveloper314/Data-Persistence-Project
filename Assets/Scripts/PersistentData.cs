@@ -7,6 +7,7 @@ public class PersistentData : MonoBehaviour
 {
     public static PersistentData Instance;
     public string Name;
+    public int HighScore=0;
     
     private void Awake()
     {
@@ -18,26 +19,26 @@ public class PersistentData : MonoBehaviour
         
         Instance = this;
         DontDestroyOnLoad(gameObject);
-        LoadName();
+        LoadScore();
     }
 
     [System.Serializable]
     class SaveData
     {
-        public string Name;
+        public int HighScore;
     }
 
-    public void SaveName()
+    public void SaveScore()
     {
         SaveData data = new SaveData();
-        data.Name = Name;
+        data.HighScore = HighScore;
 
         string json = JsonUtility.ToJson(data);
 
         File.WriteAllText(Application.persistentDataPath + "/savefile.json", json);
     }
 
-    public void LoadName()
+    public void LoadScore()
     {
         string path = Application.persistentDataPath + "/savefile.json";
         if (File.Exists(path))
@@ -45,7 +46,12 @@ public class PersistentData : MonoBehaviour
             string json = File.ReadAllText(path);
             SaveData data = JsonUtility.FromJson<SaveData>(json);
 
-            Name = data.Name;
+            HighScore = data.HighScore;
         }
+    }
+
+    void OnApplicationQuit()
+    {
+        SaveScore();
     }
 }

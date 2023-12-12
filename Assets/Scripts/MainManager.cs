@@ -10,7 +10,7 @@ public class MainManager : MonoBehaviour
     public int LineCount = 6;
     public Rigidbody Ball;
 
-    public Text ScoreText;
+    public Text ScoreText, NameAndHighScoreText;
     public GameObject GameOverText;
     
     private bool m_Started = false;
@@ -18,8 +18,6 @@ public class MainManager : MonoBehaviour
     
     private bool m_GameOver = false;
 
-    
-    // Start is called before the first frame update
     void Start()
     {
         const float step = 0.6f;
@@ -36,6 +34,8 @@ public class MainManager : MonoBehaviour
                 brick.onDestroyed.AddListener(AddPoint);
             }
         }
+
+        NameAndHighScoreText.text = $"Name: {PersistentData.Instance.Name}, Best Score: {PersistentData.Instance.HighScore}";
     }
 
     private void Update()
@@ -57,15 +57,17 @@ public class MainManager : MonoBehaviour
         {
             if (Input.GetKeyDown(KeyCode.Space))
             {
-                SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex);
+                SceneManager.LoadScene(0);
             }
         }
+        if (m_Points>PersistentData.Instance.HighScore) PersistentData.Instance.HighScore = m_Points;
     }
 
     void AddPoint(int point)
     {
         m_Points += point;
         ScoreText.text = $"Score : {m_Points}";
+        NameAndHighScoreText.text = $"Name: {PersistentData.Instance.Name}, Best Score: {PersistentData.Instance.HighScore}";
     }
 
     public void GameOver()
